@@ -11,6 +11,8 @@ import java.net.Socket;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * program nettyTest
@@ -34,6 +36,9 @@ public class SocketClient extends Thread {
     private Long time;
 
     private CountDownLatch countDownLatch;
+
+    ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
 
     public SocketClient(CountDownLatch countDownLatch, String name) {
         this.countDownLatch = countDownLatch;
@@ -101,11 +106,11 @@ public class SocketClient extends Thread {
                 if (callBackNum.intValue() == 3 * MsgInfo.count) {
                     time = System.currentTimeMillis() - startTime;
                     log.error("已接收消息{}， 耗时：{}", callBackNum.intValue(), time);
-                    //Thread.sleep(1000);
-                    //break;
+                    break;
                 }
             }
             log.error("消息发送完成？");
+            //socketWrite.close();
             countDownLatch.countDown();
         } catch (Exception e) {
             e.printStackTrace();

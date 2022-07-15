@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * program nettyTest
@@ -39,6 +40,8 @@ public class SocketServer extends Thread {
 
     private CountDownLatch serverStart;
 
+    ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
     public SocketServer(CountDownLatch serverStart, CountDownLatch countDownLatch, String name) {
         this.countDownLatch = countDownLatch;
         super.setName(name);
@@ -47,6 +50,7 @@ public class SocketServer extends Thread {
 
     @Override
     public void run () {
+
         // 对话次数
         LongAdder longAdder = new LongAdder();
         longAdder.increment();
@@ -83,6 +87,8 @@ public class SocketServer extends Thread {
                         }
                         time = System.currentTimeMillis() - startTime;
                         log.error("已发送完{}， 耗时：{}", longAdder.intValue(), time);
+                        countDownLatch.countDown();
+                        //socket.close();
                         //Thread.sleep(1000);
                     }
                 }.start();

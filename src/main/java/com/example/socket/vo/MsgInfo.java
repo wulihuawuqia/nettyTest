@@ -62,7 +62,7 @@ public class MsgInfo {
         //log.error("callBackLog sessionNum:{} {}:{}", sessionNum, callBackName, msg);
     }
 
-    public static void sendMsg(int sessionNum,
+    public synchronized static void sendMsg(int sessionNum,
                                BufferedOutputStream bw,
                                int req,
                                String msg, String name) throws IOException {

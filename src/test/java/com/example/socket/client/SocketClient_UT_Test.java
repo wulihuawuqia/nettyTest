@@ -20,7 +20,7 @@ public class SocketClient_UT_Test {
     @SneakyThrows
     @Test
     public void beforeEach() {
-        MsgInfo.count = 1000;
+        MsgInfo.count = 100000;
         SocketServer socketServerThread = new SocketServer(serverStart, countDownLatch, "李");
         SocketClient socketClientThread = new SocketClient(countDownLatch, "张");
         socketServerThread.start();
